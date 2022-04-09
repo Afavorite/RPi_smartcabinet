@@ -22,8 +22,8 @@
   <widget class="QLabel" name="label_showQRcode">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>40</y>
+     <x>500</x>
+     <y>50</y>
      <width>500</width>
      <height>500</height>
     </rect>
@@ -47,18 +47,18 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>10</x>
      <y>60</y>
-     <width>331</width>
+     <width>471</width>
      <height>481</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="boxinfo">
     <item>
-     <widget class="QLabel" name="label_showtime">
+     <widget class="QLabel" name="label_displaytime">
       <property name="font">
        <font>
         <pointsize>16</pointsize>
@@ -73,7 +73,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_shownumber">
+     <widget class="QLabel" name="label_displaynumber">
       <property name="font">
        <font>
         <pointsize>16</pointsize>
@@ -88,7 +88,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_showtemp">
+     <widget class="QLabel" name="label_displaytemp">
       <property name="font">
        <font>
         <pointsize>16</pointsize>
@@ -103,7 +103,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_showster">
+     <widget class="QLabel" name="label_displayster">
       <property name="font">
        <font>
         <pointsize>16</pointsize>
@@ -118,7 +118,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_showlock">
+     <widget class="QLabel" name="label_displaylock">
       <property name="font">
        <font>
         <pointsize>16</pointsize>

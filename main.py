@@ -1,14 +1,17 @@
 import sys
-import ui.mainwindow
+import ui.window
+from call_mainwindow import MainPageWindow
 from PyQt5.QtWidgets import QApplication, QWidget
 
 if __name__ == '__main__':
 
     app = QApplication(sys.argv)
-    m = QWidget()
+
+    m = MainPageWindow()
     # 实例ui
-    ui = ui.mainwindow.Ui_Form()
+    # UI = ui.window.Ui_Form()
     # 主窗口添加控件
-    ui.setupUi(m)
+    # UI.setupUi(m)
+
     m.show()
     sys.exit(app.exec_())
