@@ -61,7 +61,7 @@
      <widget class="QLabel" name="label_displaytime">
       <property name="font">
        <font>
-        <pointsize>16</pointsize>
+        <pointsize>24</pointsize>
        </font>
       </property>
       <property name="text">
@@ -76,7 +76,7 @@
      <widget class="QLabel" name="label_displaynumber">
       <property name="font">
        <font>
-        <pointsize>16</pointsize>
+        <pointsize>24</pointsize>
        </font>
       </property>
       <property name="text">
@@ -91,7 +91,7 @@
      <widget class="QLabel" name="label_displaytemp">
       <property name="font">
        <font>
-        <pointsize>16</pointsize>
+        <pointsize>24</pointsize>
        </font>
       </property>
       <property name="text">
@@ -106,7 +106,7 @@
      <widget class="QLabel" name="label_displayster">
       <property name="font">
        <font>
-        <pointsize>16</pointsize>
+        <pointsize>24</pointsize>
        </font>
       </property>
       <property name="text">
@@ -121,7 +121,7 @@
      <widget class="QLabel" name="label_displaylock">
       <property name="font">
        <font>
-        <pointsize>16</pointsize>
+        <pointsize>24</pointsize>
        </font>
       </property>
       <property name="text">
