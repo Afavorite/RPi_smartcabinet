@@ -8,5 +8,5 @@ if __name__ == '__main__':
 
     m = MainPageWindow()
 
-    m.show()
+    m.showFullScreen()
     sys.exit(app.exec_())
