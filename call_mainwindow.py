@@ -7,7 +7,8 @@ from w1thermsensor import W1ThermSensor, Sensor
 
 import temp_get
 
-class MainPageWindow(QWidget,Ui_Form):
+
+class MainPageWindow(QWidget, Ui_Form):
     # MainPageWindow继承自mainwindow.Ui_Form，实现UI和逻辑之间的分离
     def __init__(self, parent=None):
         super(MainPageWindow, self).__init__(parent)
@@ -31,4 +32,3 @@ class MainPageWindow(QWidget,Ui_Form):
         temp_get.setup()
         temperature = temp_get.read()
         self.label_displaytemp.setText('当前温度：' + str(round(temperature, 2)) + '℃')
-

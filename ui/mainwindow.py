@@ -93,4 +93,4 @@ class Ui_Form(object):
         self.label_displaystatus.setText(_translate("Form", "用户显示"))
         self.label_displayster.setText(_translate("Form", "紫外线状态"))
         self.label_displaylock.setText(_translate("Form", "门锁状态"))
-import resource_rc
+import resource
