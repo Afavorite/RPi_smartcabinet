@@ -9,8 +9,4 @@ if __name__ == '__main__':
     m = MainPageWindow()
     m.show()
 
-    thread_conn = ThreadHttp()
-    thread_conn.start()
-
-
     sys.exit(app.exec_())

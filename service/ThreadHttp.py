@@ -1,12 +1,12 @@
-import time
-from threading import Thread
-
 import requests
+from PyQt5.QtCore import QThread, pyqtSignal
 
 import temp_get
 
 
-class ThreadHttp(Thread):
+class ThreadHttp(QThread):
+    Signal = pyqtSignal(list)
+
     def __init__(self):
         super().__init__()
 
@@ -17,6 +17,5 @@ class ThreadHttp(Thread):
             temperature = temp_get.read()
             payload = {'1010_temp': str(round(temperature, 2))}
             r = requests.post(url, params=payload)
-            time.sleep(1)
-
-            print(r.content)
+            r_list = r.json()
+            self.Signal.emit(r_list)

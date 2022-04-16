@@ -90,7 +90,7 @@ class Ui_Form(object):
         self.label_displaytime.setText(_translate("Form", "时间显示"))
         self.label_displaynumber.setText(_translate("Form", "箱柜号:1010"))
         self.label_displaytemp.setText(_translate("Form", "温度显示"))
-        self.label_displaystatus.setText(_translate("Form", "用户显示"))
+        self.label_displaystatus.setText(_translate("Form", "当前无用户"))
         self.label_displayster.setText(_translate("Form", "紫外线状态"))
         self.label_displaylock.setText(_translate("Form", "门锁状态"))
 import resource

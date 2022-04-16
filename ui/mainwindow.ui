@@ -110,7 +110,7 @@
        </font>
       </property>
       <property name="text">
-       <string>用户显示</string>
+       <string>当前无用户</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
