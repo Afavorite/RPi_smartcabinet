@@ -5,7 +5,7 @@ import temp_get
 
 
 class ThreadHttp(QThread):
-    Signal = pyqtSignal(list)
+    SignalHttp = pyqtSignal(list)
 
     def __init__(self):
         super().__init__()
@@ -15,7 +15,8 @@ class ThreadHttp(QThread):
         temp_get.setup()
         while True:
             temperature = temp_get.read()
-            payload = {'1010_temp': str(round(temperature, 2)), '1010_lock': 'unlock', '1010_ster': 'off'}
+            payload = {'temp': str(round(temperature, 2)), 'signal': 'without_lock', 'lock': 'unlock', 'ster': 'off'}
             r = requests.post(url, params=payload)
-            r_list = r.json()
-            self.Signal.emit(r_list)
+            # r_list = r.json()
+            # self.SignalHttp.emit(r_list)
+            print(r.content)
