@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QTimer, QDateTime, pyqtSignal
+from PyQt5.QtCore import QTimer, QDateTime
 from PyQt5.QtWidgets import *
 from ui.mainwindow import Ui_Form
 from service.ThreadHttp import ThreadHttp
@@ -16,17 +16,17 @@ class MainPageWindow(QWidget, Ui_Form):
     def __init__(self, parent=None):
         super(MainPageWindow, self).__init__(parent)
         self.thread_conn = ThreadHttp()
-        # self.thread_control = ThreadControl()
+        self.thread_control = ThreadControl()
         self.timer_show = QTimer()
         self.setupUi(self)
         self.initUI()
 
     def initUI(self):
         # 紫外线灯和门锁控制线程
-        # self.thread_control.SignalControl.connect(self.receiveControl)
-        # self.thread_control.start()
+        self.thread_control.SignalControl.connect(self.receiveControl)
+        self.thread_control.start()
         # Http连接线程
-        # self.thread_conn.SignalHttp.connect(self.receiveHttp)
+        self.thread_conn.SignalHttp.connect(self.receiveHttp)
         self.thread_conn.start()
         # 设置定时器，刷新显示
         self.timer_show.timeout.connect(self.display)  # 这个通过调用槽函数来刷新显示
@@ -41,19 +41,31 @@ class MainPageWindow(QWidget, Ui_Form):
         temperature = temp_get.read()
         self.label_displaytemp.setText('当前温度：' + str(round(temperature, 2)) + '℃')
 
-    # def receiveHttp(self, r_list):
-    #     if r_list:
-    #         self.label_displaystatus.setText('当前用户：' + r_list[0]['order_creator'])
-    #         lock = r_list[0]['order_status']
-    #         if lock != "unlock":
-    #             lock = 'lock'
-    #         else:
-    #             lock = 'unlock'
-    #         ster = r_list[0]['order_sterilization']
-    #         control_list = [lock, ster]
-    #         self.thread_control.control_list = control_list
-    #         # self.signaltocontrol.emit(control_list)
-    #     else:
-    #         self.label_displaystatus.setText('当前无用户')
+    def receiveHttp(self, r_dict):
+        # print(self.thread_conn.isRunning())
+        if r_dict['control_flag'] == 'booking':
+            self.thread_control.order_temp = 'stop'
+            self.thread_control.order_ster = 'off'
+            self.thread_control.order_lock = 'lock'
+            # self.thread_conn.signal = 'without_lock'
+            self.label_displaystatus.setText('箱柜已被预约')
+        if r_dict['control_flag'] == 'using':
+            self.thread_control.order_temp = r_dict['control_temp']
+            self.thread_control.order_ster = r_dict['control_ster']
+            self.thread_control.order_lock = 'lock'
+            # self.thread_conn.signal = 'without_lock'
+            self.label_displaystatus.setText('箱柜使用中')
+        if r_dict['control_flag'] == 'unlock':
+            self.thread_control.order_temp = 'stop'
+            self.thread_control.order_ster = 'off'
+            self.thread_control.order_lock = 'unlock'
+            # self.thread_conn.signal = 'with_lock'
+            self.label_displaystatus.setText('箱柜已解锁')
+        if r_dict['control_flag'] == 'finish':
+            self.thread_control.order_temp = 'stop'
+            self.thread_control.order_ster = 'off'
+            self.thread_control.order_lock = 'lock'
+            # self.thread_conn.signal = 'without_lock'
+            self.label_displaystatus.setText('箱柜空闲')
 
-    # def receiveControl(self):
+    def receiveControl(self):
