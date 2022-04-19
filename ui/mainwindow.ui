@@ -133,14 +133,14 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_displaylock">
+     <widget class="QLabel" name="label_displaytempswitch">
       <property name="font">
        <font>
         <pointsize>24</pointsize>
        </font>
       </property>
       <property name="text">
-       <string>门锁状态</string>
+       <string>温控状态</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

@@ -42,30 +42,36 @@ class MainPageWindow(QWidget, Ui_Form):
         self.label_displaytemp.setText('当前温度：' + str(round(temperature, 2)) + '℃')
 
     def receiveHttp(self, r_dict):
-        # print(self.thread_conn.isRunning())
         if r_dict['control_flag'] == 'booking':
             self.thread_control.order_temp = 'stop'
             self.thread_control.order_ster = 'off'
             self.thread_control.order_lock = 'lock'
-            # self.thread_conn.signal = 'without_lock'
             self.label_displaystatus.setText('箱柜已被预约')
         if r_dict['control_flag'] == 'using':
             self.thread_control.order_temp = r_dict['control_temp']
             self.thread_control.order_ster = r_dict['control_ster']
             self.thread_control.order_lock = 'lock'
-            # self.thread_conn.signal = 'without_lock'
             self.label_displaystatus.setText('箱柜使用中')
         if r_dict['control_flag'] == 'unlock':
             self.thread_control.order_temp = 'stop'
             self.thread_control.order_ster = 'off'
             self.thread_control.order_lock = 'unlock'
-            # self.thread_conn.signal = 'with_lock'
             self.label_displaystatus.setText('箱柜已解锁')
         if r_dict['control_flag'] == 'finish':
             self.thread_control.order_temp = 'stop'
             self.thread_control.order_ster = 'off'
             self.thread_control.order_lock = 'lock'
-            # self.thread_conn.signal = 'without_lock'
             self.label_displaystatus.setText('箱柜空闲')
 
-    def receiveControl(self):
+    def receiveControl(self, controlfb):
+        # self.thread_conn.lock = controlfb['lock']
+        self.thread_conn.ster = controlfb['ster']
+        # if controlfb['lock'] == 'lock':
+        #     self.label_displaylock.setText('门锁已经关闭')
+        # else:
+        #     self.label_displaylock.setText('门锁已经打开')
+        if controlfb['ster'] == 'on':
+            self.label_displayster.setText('紫外线灯打开')
+        else:
+            self.label_displayster.setText('紫外线灯关闭')
+

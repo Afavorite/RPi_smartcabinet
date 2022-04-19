@@ -35,18 +35,23 @@ class ThreadControl (QThread):
             if self.order_ster == 'on':
                 GPIO.output(self.IN_ster, True)
                 controlfb['ster'] = 'on'
+
             if self.order_ster == 'off':
                 GPIO.output(self.IN_ster, False)
                 controlfb['ster'] = 'off'
-            if GPIO.input(self.IN_lock_feedback) != GPIO.HIGH:  # 检测到柜门已打开
+            time.sleep(1)
 
-            if GPIO.input(self.IN_lock_feedback) == GPIO.HIGH:
-            if self.order_lock == 'unlock' and GPIO.input(self.IN_lock_feedback) == GPIO.HIGH:
+            # if self.order_lock == 'unlock' and GPIO.input(self.IN_lock_feedback) == GPIO.HIGH:
+            #     GPIO.output(self.IN_lock, True)
+            #     time.sleep(0.5)
+            #     GPIO.output(self.IN_lock, False)
+            #     controlfb['lock'] = 'unlock'
+            # if GPIO.input(self.IN_lock_feedback) != GPIO.HIGH:  # 检测到柜门已打开
+            #     controlfb['lock'] = 'unlock'
+            # if GPIO.input(self.IN_lock_feedback) == GPIO.HIGH:
+            #     controlfb['lock'] = 'lock'
 
-                GPIO.output(self.IN_lock, True)
-                time.sleep(0.5)
-                GPIO.output(self.IN_lock, False)
-
+            self.SignalControl.emit(controlfb)
     # def settemp(self, order_temp):
     #     self.order_temp = order_temp
     #
