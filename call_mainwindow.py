@@ -64,7 +64,7 @@ class MainPageWindow(QWidget, Ui_Form):
             self.label_displaystatus.setText('箱柜空闲')
 
     def receiveControl(self, controlfb):
-        # self.thread_conn.lock = controlfb['lock']
+        self.thread_conn.lock = controlfb['lock']
         self.thread_conn.ster = controlfb['ster']
         # if controlfb['lock'] == 'lock':
         #     self.label_displaylock.setText('门锁已经关闭')
