@@ -18,6 +18,8 @@ class ThreadControl(QThread):
     IN_ster = 5
     IN_lock = 6
     IN_lock_feedback = 12
+    # IN_UP = 13
+    # IN_DOWN = 16
 
     flag = False
     controlfb = {}
@@ -33,10 +35,11 @@ class ThreadControl(QThread):
         GPIO.setwarnings(False)
         GPIO.setup(self.IN_ster, GPIO.OUT)
         GPIO.setup(self.IN_lock, GPIO.OUT)
-        GPIO.setup(self.IN_lock_feedback, GPIO.IN)# , pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(self.IN_lock_feedback, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
         # 侦测到关门信号，进入中断函数
         # GPIO.add_event_detect(self.IN_lock_feedback, GPIO.RISING, callback=self.lock_callback, bouncetime=200)
-        GPIO.add_event_detect(self.IN_lock_feedback, GPIO.RISING)
+        # GPIO.add_event_detect(self.IN_lock_feedback, GPIO.RISING, bouncetime=200)
 
     def run(self):
         # controlfb = {}
@@ -50,13 +53,17 @@ class ThreadControl(QThread):
                 self.controlfb['ster'] = 'off'
             time.sleep(0.75)
 
-            if GPIO.event_detected(self.IN_lock_feedback):
-                print('门锁已关闭')
-                self.flag = True
-                self.controlfb['lock'] = 'lock'
-                t = Thread(target=self.timewait)
-                t.start()
+            # if GPIO.event_detected(self.IN_lock_feedback):
+            #     # print('门锁已关闭')
+            #     self.flag = True
+            #     self.controlfb['lock'] = 'lock'
+            #     t = Thread(target=self.timewait)
+            #     t.start()
 
+            # if GPIO.input(self.IN_lock_feedback):
+            #     print('高电平')
+            # else:
+            #     print('低电平')
             if self.order_lock == 'unlock' and self.controlfb['lock'] == 'lock' and self.flag is False:
                 sleep(0.5)
                 if self.order_lock == 'unlock' and self.controlfb['lock'] == 'lock' and self.flag is False:
@@ -67,8 +74,10 @@ class ThreadControl(QThread):
                     time.sleep(1)
                     print('门锁断电')
                     GPIO.output(self.IN_lock, False)
+                    t = Thread(target=self.lock_check)
+                    t.start()
                     # time.sleep(1)
-                    # GPIO.add_event_detect(self.IN_lock_feedback, GPIO.RISING)
+                    # GPIO.add_event_detect(self.IN_lock_feedback, GPIO.RISING, callback=self.lock_callback, bouncetime=200)
 
             self.SignalControl.emit(self.controlfb)
 
@@ -82,5 +91,16 @@ class ThreadControl(QThread):
 
     # 延时一段时间，保证服务器收到门锁已关闭的信号，并修改指令
     # def timewait(self):
-    #     sleep(3)
+    #     sleep(5)
     #     self.flag = False
+
+    def lock_check(self):
+        print('开锁')
+        while GPIO.input(self.IN_lock_feedback) == 0:
+            sleep(0.5)
+        print('关锁')
+        self.flag = True
+        self.controlfb['lock'] = 'lock'
+        sleep(5)
+        self.flag = False
+
