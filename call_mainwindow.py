@@ -18,11 +18,11 @@ class MainPageWindow(QWidget, Ui_Form):
         self.thread_temp = ThreadTemp()
         self.thread_conn = ThreadHttp()
         self.thread_control = ThreadControl()
-        # self.thread_temp = ThreadTemp()
         self.timer_show = QTimer()
         self.setupUi(self)
         self.initUI()
         self.tempflag = 0
+        self.count = 0
 
     def initUI(self):
         # 紫外线灯和门锁控制线程
@@ -37,12 +37,16 @@ class MainPageWindow(QWidget, Ui_Form):
         self.timer_show.start(1000)  # 每隔一秒刷新一次，这里设置为1000ms
 
     def display(self):
+        self.count += 1
         time = QDateTime.currentDateTime()  # 获取当前时间
         timedisplay = time.toString("yyyy-MM-dd hh:mm:ss")  # 格式化一下时间
         self.label_displaytime.setText(timedisplay)
-
         temperature = temp_get.read()
         self.label_displaytemp.setText('当前温度：' + str(round(temperature, 2)) + '℃')
+        if self.count == 60:
+            if self.tempflag == 1:
+                print(timedisplay + ': ' + str(round(temperature, 2)))
+            self.count = 0
 
     def receiveHttp(self, r_dict):
         if r_dict['control_flag'] == 'booking':
@@ -58,9 +62,10 @@ class MainPageWindow(QWidget, Ui_Form):
         if r_dict['control_flag'] == 'using':
             if r_dict['control_temp'] != 'stop' and self.tempflag == 0:
                 self.tempflag = 1
+                self.thread_temp.settemp = r_dict['control_temp']
                 self.thread_temp.canrun = True
                 self.thread_temp.start()
-                self.label_displaytempswitch.setText('温控已打开')
+                self.label_displaytempswitch.setText('温控已打开'+self.thread_temp.settemp)
 
             self.thread_control.order_ster = r_dict['control_ster']
             self.thread_control.order_lock = 'lock'

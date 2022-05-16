@@ -107,20 +107,77 @@ class ThreadControl(QThread):
 
 class ThreadTemp(QThread):
     canrun = True
-    # temp_get.setup()
+    IN_PWM = 19
+    settemp = '10'
 
     def __init__(self):
         super().__init__()
         print('温控初始化')
+        temp_get.setup()
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setup(self.IN_PWM, GPIO.OUT)
+        self.pwm = GPIO.PWM(self.IN_PWM, 100)
 
     def run(self):
-        inc_pid = IncrementalPID(5.0, 0.2, 0.1)
+        inc_pid = IncrementalPID(5.0, 0.2, 0.2)
+        temp = float(self.settemp)
+        self.pwm.start(100)
         while True:
-            inc_pid.SetStepSignal(30.0)
-            print(inc_pid.PIDOutput)
-            sleep(0.5)
+            inc_pid.SetStepSignal(temp)
+            # inc_pid.SetInertiaTime(3, 0.1)
+            # print(inc_pid.PIDOutput)
+            # print(inc_pid.SystemOutput)
+            compare = inc_pid.PIDOutput - temp
+            if compare > 10:
+                inc_pid.PIDOutput = temp + 10
+                compare = 10
+            elif compare < 0:
+                inc_pid.PIDOutput = temp
+                compare = 0
+            if temp - temp_get.read() > 1:
+                self.pwm.ChangeDutyCycle(100)
+            else:
+                if 10 >= compare > 6:
+                    self.pwm.ChangeDutyCycle(100)
+                elif 6 >= compare > 3:
+                    self.pwm.ChangeDutyCycle(50)
+                elif 3 >= compare > 2:
+                    self.pwm.ChangeDutyCycle(40)
+                elif 2 >= compare > 1:
+                    self.pwm.ChangeDutyCycle(30)
+                elif 1 >= compare > 0.5:
+                    self.pwm.ChangeDutyCycle(20)
+                else:
+                    self.pwm.ChangeDutyCycle(0)
+            # print(compare)
+            sleep(1)
             if self.canrun is False:
+                self.pwm.stop()
                 return
+
+    # IN_PWM = 19
+    # settemp = '10'
+    # def __init__(self):
+    #     super().__init__()
+    #     GPIO.setmode(GPIO.BCM)
+    #     GPIO.setwarnings(False)
+    #     GPIO.setup(self.IN_PWM, GPIO.OUT)
+    #     self.pwm = GPIO.PWM(self.IN_PWM, 1000)
+    #
+    # def run(self):
+    #     i = int(self.settemp)
+    #     self.pwm.start(i)
+    #     while True:
+    #         # i += 10
+    #         # self.pwm.ChangeDutyCycle(i)
+    #         sleep(1)
+    #         # if i == 100:
+    #         #     i = 10
+    #         if self.canrun is False:
+    #             self.pwm.stop()
+    #             return
 
 
 class IncrementalPID:
@@ -148,13 +205,12 @@ class IncrementalPID:
                            + self.Ki * self.Error + self.Kd * (self.Error - 2 * self.LastError + self.LastLastError)
         # 计算输出
         self.PIDOutput += IncrementalValue
-        print(self.PIDOutput)
         self.LastLastError = self.LastError
         self.LastError = self.Error
 
     # 以一阶惯性环节为例子演示控制效果
-    # def SetInertiaTime(self, IntertiaTime, SampleTime):
-    #     self.SystemOutput = (IntertiaTime * self.LastSystemOutput + SampleTime * self.PIDOutput) / (
-    #                 SampleTime + IntertiaTime)
-    #     self.LastSystemOutput = self.SystemOutput
+    def SetInertiaTime(self, IntertiaTime, SampleTime):
+        self.SystemOutput = (IntertiaTime * self.LastSystemOutput + SampleTime * self.PIDOutput) / (
+                    SampleTime + IntertiaTime)
+        self.LastSystemOutput = self.SystemOutput
 
