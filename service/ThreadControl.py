@@ -53,17 +53,6 @@ class ThreadControl(QThread):
                 self.controlfb['ster'] = 'off'
             time.sleep(0.75)
 
-            # if GPIO.event_detected(self.IN_lock_feedback):
-            #     # print('门锁已关闭')
-            #     self.flag = True
-            #     self.controlfb['lock'] = 'lock'
-            #     t = Thread(target=self.timewait)
-            #     t.start()
-
-            # if GPIO.input(self.IN_lock_feedback):
-            #     print('高电平')
-            # else:
-            #     print('低电平')
             if self.order_lock == 'unlock' and self.controlfb['lock'] == 'lock' and self.flag is False:
                 sleep(0.5)
                 if self.order_lock == 'unlock' and self.controlfb['lock'] == 'lock' and self.flag is False:
@@ -76,23 +65,8 @@ class ThreadControl(QThread):
                     GPIO.output(self.IN_lock, False)
                     t = Thread(target=self.lock_check)
                     t.start()
-                    # time.sleep(1)
-                    # GPIO.add_event_detect(self.IN_lock_feedback, GPIO.RISING, callback=self.lock_callback, bouncetime=200)
 
             self.SignalControl.emit(self.controlfb)
-
-    # 防止门锁关闭后，由于指令的延时导致门锁再次打开
-    # def lock_callback(self, IN_lock_feedback):
-    #     print('门锁已关闭')
-    #     self.flag = True
-    #     self.controlfb['lock'] = 'lock'
-    #     t = Thread(target=self.timewait)
-    #     t.start()
-
-    # 延时一段时间，保证服务器收到门锁已关闭的信号，并修改指令
-    # def timewait(self):
-    #     sleep(5)
-    #     self.flag = False
 
     def lock_check(self):
         print('开锁')
@@ -156,29 +130,6 @@ class ThreadTemp(QThread):
             if self.canrun is False:
                 self.pwm.stop()
                 return
-
-    # IN_PWM = 19
-    # settemp = '10'
-    # def __init__(self):
-    #     super().__init__()
-    #     GPIO.setmode(GPIO.BCM)
-    #     GPIO.setwarnings(False)
-    #     GPIO.setup(self.IN_PWM, GPIO.OUT)
-    #     self.pwm = GPIO.PWM(self.IN_PWM, 1000)
-    #
-    # def run(self):
-    #     i = int(self.settemp)
-    #     self.pwm.start(i)
-    #     while True:
-    #         # i += 10
-    #         # self.pwm.ChangeDutyCycle(i)
-    #         sleep(1)
-    #         # if i == 100:
-    #         #     i = 10
-    #         if self.canrun is False:
-    #             self.pwm.stop()
-    #             return
-
 
 class IncrementalPID:
     def __init__(self, P: float, I: float, D: float):
