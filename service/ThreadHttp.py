@@ -13,6 +13,7 @@ class ThreadHttp(QThread):
         super().__init__()
         self.lock = 'lock'
         self.ster = 'off'
+        self.qrnumber = ''
 
     def run(self):
         url = "http://39.107.226.190:8080/smartcabinet_server/rpiservlet"

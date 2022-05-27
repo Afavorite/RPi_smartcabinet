@@ -109,13 +109,14 @@ class MainPageWindow(QWidget, Ui_Form):
             self.label_displayster.setText('紫外线灯关闭')
 
     def setQrCode(self):
-        # 更新QRcode显示
-        qrcode_number = int('1010' + str(randint(1, 999999)))
+        # QRcode显示
+        qrcode_number = '1010' + str(randint(1, 999999))
+        self.thread_conn.qrnumber = qrcode_number
         filename = 'Qrcode.png'
         qr = qrcode.QRCode(
             version=None,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=5,
+            box_size=16,
             border=4,
         )
         qr.add_data(qrcode_number)

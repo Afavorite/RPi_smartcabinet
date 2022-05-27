@@ -7,6 +7,6 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     m = MainPageWindow()
-    m.show()
+    m.showFullScreen()
 
     sys.exit(app.exec_())
