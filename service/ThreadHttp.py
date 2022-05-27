@@ -20,7 +20,7 @@ class ThreadHttp(QThread):
         temp_get.setup()
         while True:
             temperature = temp_get.read()
-            payload = {'temp': str(round(temperature, 2)), 'lock': self.lock, 'ster': self.ster}
+            payload = {'temp': str(round(temperature, 2)), 'lock': self.lock, 'ster': self.ster, 'qrnumber': self.qrnumber}
             r = requests.post(url, params=payload)
             r_dict = r.json()
             self.SignalHttp.emit(r_dict)
