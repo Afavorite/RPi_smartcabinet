@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import *
 from ui.mainwindow import Ui_Form
 from service.ThreadHttp import ThreadHttp
 from service.ThreadControl import ThreadControl, ThreadTemp, IncrementalPID
+from random import randint
+import qrcode
 
 import temp_get
 
@@ -35,6 +37,7 @@ class MainPageWindow(QWidget, Ui_Form):
         temp_get.setup()
         self.timer_show.timeout.connect(self.display)  # 这个通过调用槽函数来刷新显示
         self.timer_show.start(1000)  # 每隔一秒刷新一次，这里设置为1000ms
+        self.setQrCode()  # 初始化二维码显示
 
     def display(self):
         self.count += 1
@@ -47,6 +50,7 @@ class MainPageWindow(QWidget, Ui_Form):
             if self.tempflag == 1:
                 print(timedisplay + ': ' + str(round(temperature, 2)))
             self.count = 0
+            self.setQrCode()
 
     def receiveHttp(self, r_dict):
         if r_dict['control_flag'] == 'booking':
@@ -103,4 +107,20 @@ class MainPageWindow(QWidget, Ui_Form):
             self.label_displayster.setText('紫外线灯打开')
         else:
             self.label_displayster.setText('紫外线灯关闭')
+
+    def setQrCode(self):
+        # 更新QRcode显示
+        qrcode_number = int('1010' + str(randint(1, 999999)))
+        filename = 'Qrcode.png'
+        qr = qrcode.QRCode(
+            version=None,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=5,
+            border=4,
+        )
+        qr.add_data(qrcode_number)
+        qr.make(fit=True)
+        img = qr.make_image()
+        img.save(filename)
+        self.label_showQRcode.setPixmap(QtGui.QPixmap(filename))
 

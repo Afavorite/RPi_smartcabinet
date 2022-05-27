@@ -40,9 +40,6 @@
    <property name="textFormat">
     <enum>Qt::AutoText</enum>
    </property>
-   <property name="pixmap">
-    <pixmap resource="../resource.qrc">:/resource/img/1010.png</pixmap>
-   </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>

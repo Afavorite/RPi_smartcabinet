@@ -29,7 +29,6 @@ class Ui_Form(object):
         self.label_showQRcode.setSizePolicy(sizePolicy)
         self.label_showQRcode.setText("")
         self.label_showQRcode.setTextFormat(QtCore.Qt.AutoText)
-        self.label_showQRcode.setPixmap(QtGui.QPixmap(":/resource/img/1010.png"))
         self.label_showQRcode.setAlignment(QtCore.Qt.AlignCenter)
         self.label_showQRcode.setObjectName("label_showQRcode")
         self.layoutWidget = QtWidgets.QWidget(Form)
